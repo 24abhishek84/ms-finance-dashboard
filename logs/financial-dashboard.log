@@ -1,0 +1,6 @@
+2026-10-23 00:35:04 [HikariPool-1:housekeeper] WARN  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=2m16s913ms829µs600ns).
+2026-10-23 00:37:49 [HikariPool-1:housekeeper] WARN  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=1m45s85ms271µs).
+2026-10-23 00:49:11 [HikariPool-1:housekeeper] WARN  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=9m52s7ms477µs800ns).
+2026-10-23 01:01:02 [http-nio-8080-exec-2] WARN  c.f.d.e.GlobalExceptionHandler - Invalid argument: Email already exists
+2026-10-23 01:01:02 [http-nio-8080-exec-2] WARN  o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Resolved [java.lang.IllegalArgumentException: Email already exists]
+2026-10-23 01:02:42 [http-nio-8080-exec-3] INFO  c.f.d.service.SecurityService - Login attempt - Email: abhi@gmail.com, IP: 0:0:0:0:0:0:0:1, Success: true

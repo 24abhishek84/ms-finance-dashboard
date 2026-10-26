@@ -1,0 +1,163 @@
+{
+  "info": {
+    "name": "Finance Dashboard - Auth Routes",
+    "description": "Authentication endpoints for Financial Dashboard - includes Register, Login, and Token Validation",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "12345678"
+  },
+  "item": [
+    {
+      "name": "1. Register User",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "if (pm.response.code === 200) {",
+              "  const jsonData = pm.response.json();",
+              "  console.log('User registered successfully');",
+              "  console.log('Response:', jsonData);",
+              "}"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"john.doe@example.com\",\n  \"password\": \"SecurePassword123\",\n  \"firstName\": \"John\",\n  \"lastName\": \"Doe\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/auth/register",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "auth",
+            "register"
+          ]
+        },
+        "description": "Register a new user account\n\nRequired fields:\n- email: Valid email address\n- password: Minimum 8 characters\n- firstName: User's first name\n- lastName: User's last name"
+      },
+      "response": []
+    },
+    {
+      "name": "2. Login User",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "if (pm.response.code === 200) {",
+              "  const jsonData = pm.response.json();",
+              "  pm.environment.set('jwt_token', jsonData.token);",
+              "  pm.environment.set('userId', jsonData.userId);",
+              "  pm.environment.set('userEmail', jsonData.email);",
+              "  pm.environment.set('userName', jsonData.firstName);",
+              "  console.log('✅ Login successful!');",
+              "  console.log('JWT Token:', jsonData.token);",
+              "  console.log('User ID:', jsonData.userId);",
+              "} else {",
+              "  console.log('❌ Login failed');",
+              "}"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"john.doe@example.com\",\n  \"password\": \"SecurePassword123\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/auth/login",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "auth",
+            "login"
+          ]
+        },
+        "description": "Login with email and password\n\nReturns:\n- token: JWT token for authenticated requests\n- userId: User's unique ID\n- email: User's email\n- firstName: User's first name\n\nThe JWT token is automatically saved to environment variable 'jwt_token'"
+      },
+      "response": []
+    },
+    {
+      "name": "3. Validate Token",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{jwt_token}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/auth/validate",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "auth",
+            "validate"
+          ]
+        },
+        "description": "Validate if JWT token is still valid\n\nHeader required:\n- Authorization: Bearer {jwt_token}\n\nReturns:\n- true: Token is valid\n- false: Token is invalid or expired"
+      },
+      "response": []
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8080",
+      "type": "string"
+    },
+    {
+      "key": "jwt_token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "userId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "userEmail",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "userName",
+      "value": "",
+      "type": "string"
+    }
+  ]
+}

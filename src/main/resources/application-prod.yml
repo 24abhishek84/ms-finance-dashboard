@@ -1,0 +1,86 @@
+spring:
+  application:
+    name: financial-dashboard-ms
+
+  datasource:
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5433}/${DB_NAME:financial_db}
+    username: ${DB_USER:postgres}
+    password: ${DB_PASSWORD:password}
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+        jdbc:
+          batch_size: 20
+        order_inserts: true
+        order_updates: true
+
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP:localhost:9092}
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    consumer:
+      bootstrap-servers: ${KAFKA_BOOTSTRAP:localhost:9092}
+      group-id: financial-dashboard-group
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+
+  cache:
+    type: caffeine
+    caffeine:
+      spec: maximumSize=1000,expireAfterWrite=10m
+
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    baseline-on-migrate: true
+
+server:
+  port: ${SERVER_PORT:8080}
+  servlet:
+    context-path: /api
+
+# Security
+app:
+  jwt:
+    secret: ${JWT_SECRET:your-secret-key-min-256-bits-long-for-HS256}
+    expiration: 86400000  # 24 hours in milliseconds
+
+  security:
+    # PROD: Strict banking-grade security
+    rate-limit:
+      enabled: true
+      max-attempts: 3
+      window-minutes: 60
+    account-lockout:
+      enabled: true
+      max-attempts: 2
+      lockout-minutes: 30
+    mfa:
+      enabled: true
+      methods: EMAIL,SMS
+    audit:
+      enabled: true
+      log-level: DETAILED
+    alerts:
+      enabled: true
+      email: ${ALERT_EMAIL:security-team@bank.com}
+      slack-webhook: ${SLACK_WEBHOOK_URL:}
+
+logging:
+  level:
+    root: WARN
+    com.finance.dashboard: INFO
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+  file:
+    name: logs/financial-dashboard.log
+    max-size: 10MB
+    max-history: 30

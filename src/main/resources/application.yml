@@ -1,0 +1,74 @@
+spring:
+  application:
+    name: financial-dashboard-ms
+
+  datasource:
+    url: jdbc:postgresql://localhost:5433/financial_db
+    username: postgres
+    password: password
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+        jdbc:
+          batch_size: 20
+        order_inserts: true
+        order_updates: true
+
+  kafka:
+    bootstrap-servers: localhost:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    consumer:
+      bootstrap-servers: localhost:9092
+      group-id: financial-dashboard-group
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+
+  cache:
+    type: caffeine
+    caffeine:
+      spec: maximumSize=1000,expireAfterWrite=10m
+
+server:
+  port: 8080
+  servlet:
+    context-path: /api
+
+# Security
+app:
+  jwt:
+    secret: your-secret-key-min-256-bits-long-for-HS256
+    expiration: 86400000  # 24 hours in milliseconds
+
+  security:
+    # DEV: Relaxed security for testing
+    rate-limit:
+      enabled: false
+      max-attempts: 10
+      window-minutes: 60
+    account-lockout:
+      enabled: false
+      max-attempts: 5
+      lockout-minutes: 5
+    mfa:
+      enabled: false
+      methods: EMAIL,SMS
+    audit:
+      enabled: false
+      log-level: BASIC
+    alerts:
+      enabled: false
+      email: null
+      slack-webhook: null
+
+logging:
+  level:
+    root: INFO
+    com.finance.dashboard: DEBUG

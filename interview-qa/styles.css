@@ -1,0 +1,29 @@
+* { box-sizing: border-box; }
+body { margin: 0; display: flex; min-height: 100vh; font: 16px/1.6 system-ui, sans-serif; color: #1f2937; background: #f8fafc; }
+a { color: #2563eb; text-decoration: none; }
+a:hover { text-decoration: underline; }
+#sidebar { width: 300px; flex-shrink: 0; background: #0f172a; color: #e2e8f0; padding: 16px; position: sticky; top: 0; height: 100vh; overflow-y: auto; }
+#sidebar h1 { font-size: 1.2rem; margin: 0 0 12px; }
+#sidebar h1 a { color: #fff; }
+#search { width: 100%; padding: 8px; border-radius: 6px; border: 0; margin-bottom: 12px; }
+.topic { margin-bottom: 8px; }
+.topic > a { display: block; font-weight: 700; color: #93c5fd; padding: 4px 0; }
+.level-link { display: inline-block; margin: 0 6px 4px 0; padding: 1px 10px; border-radius: 999px; font-size: .8rem; background: #1e293b; color: #cbd5e1; }
+.level-link.active { background: #2563eb; color: #fff; }
+.qlink { display: block; padding: 3px 8px; font-size: .85rem; color: #cbd5e1; border-left: 2px solid #334155; margin-left: 4px; }
+.qlink.active { color: #fff; border-color: #60a5fa; background: #1e293b; }
+#main { flex: 1; padding: 32px; max-width: 900px; }
+.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; }
+.card { background: #fff; border: 1px solid #e2e8f0; border-radius: 10px; padding: 16px; }
+.card h3 { margin: 0 0 8px; }
+.badge { font-size: .75rem; padding: 2px 8px; border-radius: 999px; color: #fff; text-transform: uppercase; }
+.basic { background: #16a34a; } .medium { background: #d97706; } .senior { background: #dc2626; }
+.qa { background: #fff; border: 1px solid #e2e8f0; border-radius: 10px; padding: 20px; margin: 16px 0; }
+.qa h2 { margin-top: 0; font-size: 1.25rem; }
+pre { background: #0f172a; color: #e2e8f0; padding: 12px; border-radius: 8px; overflow-x: auto; font-size: .85rem; }
+code { background: #e2e8f0; padding: 1px 5px; border-radius: 4px; font-size: .9em; }
+pre code { background: none; padding: 0; }
+.pager { display: flex; justify-content: space-between; margin-top: 16px; }
+.list a { display: block; padding: 8px 0; border-bottom: 1px solid #e2e8f0; }
+.hint { color: #64748b; }
+@media (max-width: 800px) { body { flex-direction: column; } #sidebar { width: 100%; height: auto; position: static; } #main { padding: 16px; } }
