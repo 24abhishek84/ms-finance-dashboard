@@ -7,7 +7,7 @@ import org.springframework.kafka.annotation.EnableKafka;
 
 @SpringBootApplication
 @EnableCaching
-@EnableKafka
+//@EnableKafka
 public class FinancialDashboardApplication {
 
 	public static void main(String[] args) {

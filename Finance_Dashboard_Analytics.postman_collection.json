@@ -1,0 +1,294 @@
+{
+  "info": {
+    "name": "Finance Dashboard Analytics API",
+    "description": "Analytics endpoints for expense aggregation and dashboard views",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "analytics_v1"
+  },
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Login - Get Token",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "  const jsonData = pm.response.json();",
+                  "  pm.environment.set('jwt_token', jsonData.token);",
+                  "  pm.environment.set('userId', jsonData.userId);",
+                  "  console.log('Token saved:', jsonData.token);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"test@example.com\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/login",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Analytics",
+      "item": [
+        {
+          "name": "Get Current Year Expenses",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/analytics/yearly/current",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "analytics",
+                "yearly",
+                "current"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Yearly Expenses (Specific Year)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/analytics/yearly/2024",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "analytics",
+                "yearly",
+                "2024"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Current Month Expenses",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/analytics/monthly/current",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "analytics",
+                "monthly",
+                "current"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Monthly Expenses (Specific Month)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/analytics/monthly/2024/11",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "analytics",
+                "monthly",
+                "2024",
+                "11"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Current Week Expenses",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/analytics/weekly/current",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "analytics",
+                "weekly",
+                "current"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Weekly Expenses (Custom Range)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/analytics/weekly?startDate=2024-11-11",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "analytics",
+                "weekly"
+              ],
+              "query": [
+                {
+                  "key": "startDate",
+                  "value": "2024-11-11"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Expenses by Category (Custom Date Range)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/analytics/expenses-by-category?startDate=2024-01-01&endDate=2024-12-31",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "analytics",
+                "expenses-by-category"
+              ],
+              "query": [
+                {
+                  "key": "startDate",
+                  "value": "2024-01-01"
+                },
+                {
+                  "key": "endDate",
+                  "value": "2024-12-31"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Sub-Category Breakdown",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/analytics/category/1/breakdown?startDate=2024-01-01&endDate=2024-12-31",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "analytics",
+                "category",
+                "1",
+                "breakdown"
+              ],
+              "query": [
+                {
+                  "key": "startDate",
+                  "value": "2024-01-01"
+                },
+                {
+                  "key": "endDate",
+                  "value": "2024-12-31"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8080/api"
+    },
+    {
+      "key": "jwt_token",
+      "value": ""
+    },
+    {
+      "key": "userId",
+      "value": ""
+    }
+  ]
+}

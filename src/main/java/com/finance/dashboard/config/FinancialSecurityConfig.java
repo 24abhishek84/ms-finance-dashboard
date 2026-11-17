@@ -51,6 +51,9 @@ public class FinancialSecurityConfig {
                 // Note: context-path is /api, so these paths are WITHOUT /api prefix
                 .requestMatchers("/auth/register", "/auth/login").permitAll()
                 .requestMatchers("/auth/validate").permitAll()
+                .requestMatchers("/test/hello").permitAll()
+                .requestMatchers("/seed/**").authenticated()
+                .requestMatchers("/debug/auth-info").authenticated()
                 .requestMatchers("/actuator/health").permitAll()
                 .requestMatchers("/actuator/**").hasRole("ADMIN")
                 .anyRequest().authenticated()

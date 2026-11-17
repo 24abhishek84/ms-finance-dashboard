@@ -20,6 +20,9 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
+import com.finance.dashboard.event.CategoryEvent;
+import com.finance.dashboard.event.producer.CategoryEventProducer;
+import org.mockito.ArgumentCaptor;
 
 @ExtendWith(MockitoExtension.class)
 public class CategoryServiceTest {
@@ -30,6 +33,9 @@ public class CategoryServiceTest {
     @Mock
     private UserRepository userRepository;
 
+    @Mock
+    private CategoryEventProducer eventProducer;
+
     @InjectMocks
     private CategoryService categoryService;
 
@@ -39,19 +45,19 @@ public class CategoryServiceTest {
     @BeforeEach
     void setUp() {
         testUser = User.builder()
-            .id(1L)
-            .email("test@example.com")
-            .firstName("John")
-            .password("password123")
-            .build();
+                .id(1L)
+                .email("test@example.com")
+                .firstName("John")
+                .password("password123")
+                .build();
 
         testCategory = Category.builder()
-            .id(1L)
-            .name("Groceries")
-            .type(Category.CategoryType.EXPENSE)
-            .color("#FF6B6B")
-            .user(testUser)
-            .build();
+                .id(1L)
+                .name("Groceries")
+                .type(Category.CategoryType.EXPENSE)
+                .color("#FF6B6B")
+                .user(testUser)
+                .build();
     }
 
     @Test
@@ -73,9 +79,34 @@ public class CategoryServiceTest {
         assertNotNull(result);
         assertEquals("Groceries", result.getName());
         assertEquals(Category.CategoryType.EXPENSE, result.getType());
-        
+
         verify(categoryRepository, times(1)).save(any(Category.class));
         verify(userRepository, times(1)).findById(1L);
+    }
+
+    @Test
+    @DisplayName("Should publish CATEGORY_CREATED event when creating category")
+    void testCreateCategoryPublishesEvent() {
+        // Arrange
+        CategoryRequestDTO request = new CategoryRequestDTO();
+        request.setName("Groceries");
+        request.setType("EXPENSE");
+        request.setColor("#FF6B6B");
+
+        when(userRepository.findById(1L)).thenReturn(Optional.of(testUser));
+        when(categoryRepository.save(any(Category.class))).thenReturn(testCategory);
+
+        // Act
+        categoryService.createCategory(1L, request);
+
+        // Assert
+        ArgumentCaptor<CategoryEvent> eventCaptor = ArgumentCaptor.forClass(CategoryEvent.class);
+        verify(eventProducer, times(1)).publishCategoryEvent(eventCaptor.capture());
+
+        CategoryEvent publishedEvent = eventCaptor.getValue();
+        assertEquals(CategoryEvent.EventType.CATEGORY_CREATED, publishedEvent.getEventType());
+        assertEquals(1L, publishedEvent.getCategoryId());
+        assertEquals(1L, publishedEvent.getUserId());
     }
 
     @Test
@@ -103,7 +134,7 @@ public class CategoryServiceTest {
 
         when(categoryRepository.findById(categoryId)).thenReturn(Optional.of(testCategory));
         when(categoryRepository.save(any(Category.class))).thenReturn(testCategory);
-        
+
         // Act
         Category result = categoryService.updateCategory(categoryId, request);
 

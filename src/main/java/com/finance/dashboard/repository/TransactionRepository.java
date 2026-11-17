@@ -39,4 +39,9 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long>,
 
     List<Transaction> findByTransactionDateBetweenOrderByTransactionDateDesc(LocalDate startDate, LocalDate endDate);
 
+    List<Transaction> findByUserIdAndCategoryIdAndTransactionDateBetween(
+        Long userId, Long categoryId, LocalDate startDate, LocalDate endDate);
+
+    List<Transaction> findByUserIdAndCategoryParentCategoryIdAndTransactionDateBetween(
+        Long userId, Long parentCategoryId, LocalDate startDate, LocalDate endDate);
 }

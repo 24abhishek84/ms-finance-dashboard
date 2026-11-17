@@ -30,6 +30,13 @@ spring:
       group-id: financial-dashboard-group
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+    properties:
+      connections.max.idle.ms: 30000
+    
+kafka:
+  topics:
+    category: category-events
+
   
   cache:
     type: caffeine
